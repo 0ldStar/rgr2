@@ -75,19 +75,37 @@ void Demon_sort(int *arr, int begin, int end) {
         }
     } while (right_min < left_max);
 }
-
-int main() {
-    srand(time(NULL));
-    int len = 1000;
+void call(int len) {
     int *arr;
+    long time_start, time_finish;
     arr = (int *) malloc(len * sizeof(int));
     if (!arr)exit(-1);
+    FILE *fp;
+    if ((fp = fopen("write.txt", "a")) == NULL) {
+        printf("Can't open file 'write.txt'\n");
+        exit(-1);
+    }/*
+    char c;
+    do {
+        c = fgetc(fp);
+    } while (c != '\n');
+*/
     for (int i = 0; i < len; ++i) {
         arr[i] = rand() % 10000;
     }
+    time_start = clock();
     Demon_sort(arr, 0, len);
-
-    printf("\nTIME: %li\n", clock());
+    time_finish = clock();
+    fprintf(fp,"%d %li\n",len, time_finish -time_start);
+    fclose(fp);
     free(arr);
+}
+
+int main() {
+    srand(time(NULL));
+    call(10);
+    call(100);
+    call(1000);
+    call(10000);
     return 0;
 }
